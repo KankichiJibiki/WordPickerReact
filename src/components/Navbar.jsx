@@ -2,7 +2,9 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 const Navbar = () => {
-  return (
+    const linkClass = ({ isActive }) => isActive ? 'text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2' : 'text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-lg';
+
+    return (
     <nav className='bg-teal-500 border-b border-indigo-300'>
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="flex h-20 items-center justify-between">
@@ -13,7 +15,23 @@ const Navbar = () => {
                     </NavLink>
                     {/* right nav */}
                     <div className="md:ml-auto">
-
+                        <div className="flex space-x-1">
+                            <NavLink
+                            to="/"
+                            className={linkClass}
+                            >Home
+                            </NavLink>
+                            <NavLink
+                            to="/login"
+                            className={linkClass}
+                            >Log in
+                            </NavLink>
+                            <NavLink
+                            to="/signup"
+                            className={linkClass}
+                            >Sign up
+                            </NavLink>
+                        </div>
                     </div>
                 </div>
             </div>
