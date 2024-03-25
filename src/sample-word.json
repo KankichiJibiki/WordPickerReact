@@ -1,0 +1,59 @@
+{
+    "wordLists": [
+        {
+            "id": "1",
+            "word": "population",
+            "definition_en": "the number of inhabitants (either the total number or the number of a particular race or class) in a given place (country or city etc.)",
+            "definition_jp": "人口",
+            "type": "noun",
+            "synonyms": [
+                "universe"
+            ],
+            "examples": [
+                "the population seemed to be well fed and clothed"
+            ],  
+            "pronunciation": {
+                "all": "pɑpjə'leɪʃən"
+            },
+            "example-audio": "",
+            "your-audio": ""
+        },
+        {
+            "id": "2",
+            "word": "enormous",
+            "definition_en": "extraordinarily large in size or extent or amount or power or degree",
+            "definition_jp": "巨大, 膨大",
+            "type": "adjective",
+            "synonyms": [
+                "tremendous"
+            ],
+            "examples": [
+                "an enormous boulder",
+                "enormous expenses"
+            ],
+            "pronunciation": {
+                "all": "ɪ'nɔrməs"
+            },
+            "example-audio": "",
+            "your-audio": ""
+        },
+        {
+            "id": "3",
+            "word": "come to light",
+            "definition_en": "be revealed or disclosed",
+            "definition_jp": "明るみに出る、ばれる",
+            "type": "verb",
+            "synonyms": [
+                "come to hand"
+            ],
+            "examples": [
+                "The truth finally came to light"
+            ],
+            "pronunciation": {
+                "all": ""
+            },
+            "example-audio": "",
+            "your-audio": ""
+        }
+    ]
+}
