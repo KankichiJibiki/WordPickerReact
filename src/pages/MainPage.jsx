@@ -18,9 +18,12 @@ const MainPage = () => {
                 </div>
             </div>
 
-            <h2 className='text-center mt-4 p-2 text-xl'>
-                従来のフラッシュカードより単語の定着率UP
-            </h2>
+            <div className="text-center my-5">
+                <h2 className='text-xl mb-1'>
+                    従来のフラッシュカードより単語の定着率UP
+                </h2>
+                <p className="text-sm text-gray-600">正しい発音を再生もできるし、自分の発音をレコードも登録できる。ユニークなオリジナルの単語帳を作ろう！</p>
+            </div>
             <div className="flex justify-around flex-wrap ">
                 { 
                     sampleWords.wordLists.map((wordList) => (
@@ -29,13 +32,15 @@ const MainPage = () => {
                 }
             </div>
 
-            <h2 className='text-center mt-4 p-2 text-xl'>
+            <h2 className='text-center my-5 p-2 text-xl'>
                 自由に覚えたい単語を登録してみよう。単語の意味などは自動補完してくれるから簡単！
             </h2>
 
-            <h2 className='text-center mt-4 p-2 text-xl'>
+            <h2 className='text-center my-5 p-2 text-xl'>
                 自分が覚えたい単語の登録はもちろん180語搭載のスターターパックも使える
             </h2>
+
+            {/* Directs to either signup or login */}
             
         </>
     )
