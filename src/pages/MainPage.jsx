@@ -22,10 +22,16 @@ const MainPage = () => {
                 従来のフラッシュカードより単語の定着率UP
             </h2>
             <div className="flex justify-around flex-wrap ">
-                { sampleWords.wordLists.map((wordList) => (
-                    <FlashCard key={ wordList.id } wordList={ wordList } />
-                )) }
+                { 
+                    sampleWords.wordLists.map((wordList) => (
+                        <FlashCard key={ wordList.id } wordList={ wordList } />
+                    )) 
+                }
             </div>
+
+            <h2 className='text-center mt-4 p-2 text-xl'>
+                自由に覚えたい単語を登録してみよう。単語の意味などは自動補完してくれるから簡単！
+            </h2>
 
             <h2 className='text-center mt-4 p-2 text-xl'>
                 自分が覚えたい単語の登録はもちろん180語搭載のスターターパックも使える
