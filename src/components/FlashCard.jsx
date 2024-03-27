@@ -7,14 +7,16 @@ import { AiFillAudio } from "react-icons/ai";
 import { FaStopCircle } from "react-icons/fa";
 import { initializeAudio, playAudio, stopAudio } from '../Utils/AudioUtils';
 import { WordTypes } from '../constants/WordTypes';
+import { startRecording, stopRecording, getAudioUrl, playRecording } from '../Utils/RecordVoiceUtils';
 
 const FlashCard = ({ wordList }) => {
     const [isViewAll, toggleView] = useState(false);
     const [isRecording, toggleRecord] = useState(false);
+    const [yourAudio, setYourAudio] = useState(wordList.yourAudio);
 
     const wordTypes = WordTypes();
     const exAudioExists = wordList.exampleAudio === '' ? false : true;
-    const usersAudioExists = wordList.yourAudio === '' ? false : true;
+    const usersAudioExists = yourAudio === '' ? false : true;
     let badgeStyle = 'bg-yellow-100 text-yellow-800 font-medium dark:bg-yellow-900 dark:text-yellow-300';
     if(!usersAudioExists) {
         badgeStyle = 'bg-blue-100 text-blue-800 font-medium dark:bg-blue-900 dark:text-blue-300';
@@ -31,6 +33,26 @@ const FlashCard = ({ wordList }) => {
             playAudio();
         }
     }
+
+    const handleStartRecording = () => {
+        toggleRecord(true);
+        startRecording();
+    };
+    
+    var audioUrl = ''
+    const handleStopRecording = () => {
+        toggleRecord(false);
+        stopRecording();
+
+        playRecording();
+
+        audioUrl = getAudioUrl();
+        console.log(audioUrl);
+        if(audioUrl) {
+            setYourAudio(audioUrl);
+            console.log(yourAudio);
+        }
+    };
 
     return (
         <Card bg='bg-teal-100 mb-2'>
@@ -98,7 +120,7 @@ const FlashCard = ({ wordList }) => {
                             <div className="my-2">
                                 <audio 
                                     controls 
-                                    src={ wordList.yourAudio } 
+                                    src={ audioUrl } 
                                     className='w-full h-9'
                                 ></audio>
 
@@ -109,14 +131,21 @@ const FlashCard = ({ wordList }) => {
                                                 isRecording ? '停止する' : 'レコードする'
                                             }
                                         </span>
-                                        <button 
-                                            className='hover:text-gray-600' 
-                                            onClick={ () => toggleRecord((prevState) => !prevState)} 
-                                        >
-                                            {
-                                                isRecording ? <FaStopCircle className='text-red-600' /> : <AiFillAudio />
-                                            }
-                                        </button>
+                                        {
+                                            isRecording ? 
+                                            <button 
+                                                className='hover:text-gray-600' 
+                                                onClick={ () => handleStopRecording() } 
+                                            >
+                                                <FaStopCircle className='text-red-600' />
+                                            </button> : 
+                                            <button 
+                                                className='hover:text-gray-600' 
+                                                onClick={ () => handleStartRecording() } 
+                                            >
+                                                <AiFillAudio />
+                                            </button> 
+                                        }
                                     </div>
                                     <div className="text-sm text-gray-700 mr-7">
                                         0:00
