@@ -22,7 +22,7 @@ const MainPage = () => {
                 <h2 className='text-xl mb-1'>
                     従来のフラッシュカードより単語の定着率UP
                 </h2>
-                <p className="text-sm text-gray-600">正しい発音を再生もできるし、自分の発音をレコードも登録できる。ユニークなオリジナルの単語帳を作ろう！</p>
+                <p className="text-sm text-gray-600">正しい発音を再生もできるし、自分の発音をレコード登録もできる。ユニークなオリジナルの単語帳を作ろう！</p>
             </div>
             <div className="flex justify-around flex-wrap ">
                 { 

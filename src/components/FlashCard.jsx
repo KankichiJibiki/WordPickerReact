@@ -4,11 +4,13 @@ import { useState } from 'react'
 import { GrCaretDown, GrCaretUp  } from "react-icons/gr";
 import { GiSpeaker } from "react-icons/gi";
 import { AiFillAudio } from "react-icons/ai";
+import { FaStopCircle } from "react-icons/fa";
 import { initializeAudio, playAudio, stopAudio } from '../Utils/AudioUtils';
 import { WordTypes } from '../constants/WordTypes';
 
 const FlashCard = ({ wordList }) => {
     const [isViewAll, toggleView] = useState(false);
+    const [isRecording, toggleRecord] = useState(false);
 
     const wordTypes = WordTypes();
     const exAudioExists = wordList.exampleAudio === '' ? false : true;
@@ -97,16 +99,28 @@ const FlashCard = ({ wordList }) => {
                                 <audio 
                                     controls 
                                     src={ wordList.yourAudio } 
-                                    className='w-52 h-10'
+                                    className='w-full h-9'
                                 ></audio>
 
-                                <div className="flex my-6">
-                                    <span className='text-xs mr-1'>
-                                        レコードする
-                                    </span>
-                                    <span>
-                                        <AiFillAudio />
-                                    </span>
+                                <div className="flex justify-between my-6">
+                                    <div className="flex">
+                                        <span className='text-xs mr-1 mt-0.5'>
+                                            {
+                                                isRecording ? '停止する' : 'レコードする'
+                                            }
+                                        </span>
+                                        <button 
+                                            className='hover:text-gray-600' 
+                                            onClick={ () => toggleRecord((prevState) => !prevState)} 
+                                        >
+                                            {
+                                                isRecording ? <FaStopCircle className='text-red-600' /> : <AiFillAudio />
+                                            }
+                                        </button>
+                                    </div>
+                                    <div className="text-sm text-gray-700 mr-7">
+                                        0:00
+                                    </div>
                                 </div>
                             </div>
                         </div>
