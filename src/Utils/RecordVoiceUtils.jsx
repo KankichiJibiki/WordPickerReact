@@ -1,5 +1,6 @@
-export let mediaRecorder;
+let mediaRecorder;
 let audioChunks = [];
+let onStopPromiseResolve;
 
 export const startRecording = async () => {
     try {
@@ -7,6 +8,7 @@ export const startRecording = async () => {
 
         mediaRecorder = new MediaRecorder(audioStream);
         mediaRecorder.ondataavailable = handleDataAvailable;
+        mediaRecorder.onstop = () => onStopPromiseResolve();
         mediaRecorder.start();
     } catch (err) {
         console.log(err);
@@ -25,7 +27,11 @@ export const handleDataAvailable = (event) => {
     console.log(audioChunks);
 }
 
-export const getAudioUrl = () => {
+export const getAudioUrl = async () => {
+    await new Promise(resolve => {
+        onStopPromiseResolve = resolve;
+    });
+
     console.log(audioChunks);
     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
     console.log(audioBlob.size);
