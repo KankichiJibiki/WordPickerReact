@@ -7,12 +7,13 @@ import { AiFillAudio } from "react-icons/ai";
 import { FaStopCircle } from "react-icons/fa";
 import { initializeAudio, playAudio, stopAudio } from '../Utils/AudioUtils';
 import { WordTypes } from '../constants/WordTypes';
-import { startRecording, stopRecording, getAudioUrl, playRecording } from '../Utils/RecordVoiceUtils';
+import { startRecording, stopRecording, getAudioUrl, clearAudio } from '../Utils/RecordVoiceUtils';
 
 const FlashCard = ({ wordList }) => {
     const [isViewAll, toggleView] = useState(false);
     const [isRecording, toggleRecord] = useState(false);
     const [yourAudio, setYourAudio] = useState(wordList.yourAudio);
+    const [recordError, detectRecordError] = useState(false);
 
     const wordTypes = WordTypes();
     const exAudioExists = wordList.exampleAudio === '' ? false : true;
@@ -35,23 +36,25 @@ const FlashCard = ({ wordList }) => {
     }
 
     const handleStartRecording = () => {
+        detectRecordError(false);
         toggleRecord(true);
         startRecording();
     };
     
-    var audioUrl = ''
-    const handleStopRecording = () => {
+    const handleStopRecording = async () => {
         toggleRecord(false);
         stopRecording();
 
-        playRecording();
-
-        audioUrl = getAudioUrl();
+        const audioUrl = await getAudioUrl();
         console.log(audioUrl);
-        if(audioUrl) {
-            setYourAudio(audioUrl);
-            console.log(yourAudio);
+        if(!audioUrl) {
+            detectRecordError(true);
+            clearAudio();
+            return
         }
+        setYourAudio(audioUrl);
+        console.log(yourAudio);
+        clearAudio();
     };
 
     return (
@@ -120,11 +123,11 @@ const FlashCard = ({ wordList }) => {
                             <div className="my-2">
                                 <audio 
                                     controls 
-                                    src={ audioUrl } 
+                                    src={ yourAudio } 
                                     className='w-full h-9'
                                 ></audio>
 
-                                <div className="flex justify-between my-6">
+                                <div className="flex justify-between mt-6 mb-1">
                                     <div className="flex">
                                         <span className='text-xs mr-1 mt-0.5'>
                                             {
@@ -151,6 +154,10 @@ const FlashCard = ({ wordList }) => {
                                         0:00
                                     </div>
                                 </div>
+                                
+                                {
+                                    recordError ? <span className='text-red-600 text-xs'>もう一度やり直してください</span> : <></>
+                                }
                             </div>
                         </div>
                     </div>
