@@ -8,8 +8,11 @@ import { FaStopCircle } from "react-icons/fa";
 import { initializeAudio, playAudio, stopAudio } from '../Utils/AudioUtils';
 import { WordTypes } from '../constants/WordTypes';
 import { startRecording, stopRecording, getAudioUrl, clearAudio } from '../Utils/RecordVoiceUtils';
+import TimerUtils from '../Utils/TimerUtils';
 
 const FlashCard = ({ wordList }) => {
+    const { startTimer, resetTimer, displayTime } = TimerUtils();
+
     const [isViewAll, toggleView] = useState(false);
     const [isRecording, toggleRecord] = useState(false);
     const [yourAudio, setYourAudio] = useState(wordList.yourAudio);
@@ -39,6 +42,7 @@ const FlashCard = ({ wordList }) => {
         detectRecordError(false);
         toggleRecord(true);
         startRecording();
+        startTimer();
     };
     
     const handleStopRecording = async () => {
@@ -46,15 +50,14 @@ const FlashCard = ({ wordList }) => {
         stopRecording();
 
         const audioUrl = await getAudioUrl();
-        console.log(audioUrl);
         if(!audioUrl) {
             detectRecordError(true);
             clearAudio();
             return
         }
         setYourAudio(audioUrl);
-        console.log(yourAudio);
         clearAudio();
+        resetTimer();
     };
 
     return (
@@ -151,7 +154,7 @@ const FlashCard = ({ wordList }) => {
                                         }
                                     </div>
                                     <div className="text-sm text-gray-700 mr-7">
-                                        0:00
+                                        { displayTime }
                                     </div>
                                 </div>
                                 

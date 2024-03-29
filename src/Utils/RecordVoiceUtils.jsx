@@ -22,9 +22,7 @@ export const stopRecording = () => {
 }
 
 export const handleDataAvailable = (event) => {
-    console.log(event.data);
     audioChunks.push(event.data);
-    console.log(audioChunks);
 }
 
 export const getAudioUrl = async () => {
@@ -32,9 +30,7 @@ export const getAudioUrl = async () => {
         onStopPromiseResolve = resolve;
     });
 
-    console.log(audioChunks);
     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-    console.log(audioBlob.size);
     if(audioBlob.size == 0) {
         return false;
     }
@@ -49,7 +45,5 @@ export const playRecording = () => {
 }
 
 export const clearAudio = () => {
-    console.log(audioChunks);
     audioChunks = [];
-    console.log(audioChunks);
 }
