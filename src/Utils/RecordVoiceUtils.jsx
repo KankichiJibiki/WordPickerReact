@@ -1,6 +1,6 @@
 let mediaRecorder;
 let audioChunks = [];
-let onStopPromiseResolve;
+let onStopPromiseResolve = null;
 
 export const startRecording = async () => {
     try {
@@ -8,15 +8,23 @@ export const startRecording = async () => {
 
         mediaRecorder = new MediaRecorder(audioStream);
         mediaRecorder.ondataavailable = handleDataAvailable;
-        mediaRecorder.onstop = () => onStopPromiseResolve();
+        onStopPromiseResolve = null;
+        mediaRecorder.onstop = () => onStopPromiseResolve && onStopPromiseResolve();
         mediaRecorder.start();
     } catch (err) {
         console.log(err);
     }
 }
 
+export const pauseRecording = () => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.pause();
+    }
+}
+
 export const stopRecording = () => {
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.pause();
         mediaRecorder.stop();
     }
 }

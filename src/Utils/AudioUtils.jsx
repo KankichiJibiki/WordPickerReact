@@ -22,3 +22,16 @@ export const stopAudio = () => {
         audioInstance.currentTime = 0;
     }
 }
+
+export const getAudioDuration = () => {
+    return new Promise((resolve, reject) => {
+        audioInstance.onloadedmetadata = () => {
+            const duration = audioInstance.duration;
+            resolve(duration);
+        };
+        audioInstance.onerror = (error) => {
+            reject(error);
+        };
+        audioInstance.src = audioUrl;
+    });
+};

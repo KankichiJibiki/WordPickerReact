@@ -1,6 +1,7 @@
 import React from 'react'
 import FlashCard from '../components/FlashCard'
 import sampleWords from '../sample-word.json'
+import AddFlashCard from '../components/AddFlashCard'
 
 const MainPage = () => {
     return (
@@ -35,6 +36,10 @@ const MainPage = () => {
             <h2 className='text-center my-5 p-2 text-xl'>
                 自由に覚えたい単語を登録してみよう。単語の意味などは自動補完してくれるから簡単！
             </h2>
+            <div>
+                <AddFlashCard />
+            </div>
+            
 
             <h2 className='text-center my-5 p-2 text-xl'>
                 自分が覚えたい単語の登録はもちろん180語搭載のスターターパックも使える
