@@ -3,10 +3,10 @@ import { AiFillAudio } from "react-icons/ai";
 import { FaCircleStop } from "react-icons/fa6";
 import { CiPause1 } from "react-icons/ci";
 import { VscDebugStart } from "react-icons/vsc";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TimerUtils from '../Utils/TimerUtils';
 import { startRecording, stopRecording, getAudioUrl, clearAudio, pauseRecording } from '../Utils/RecordVoiceUtils';
-import { getAudioDuration } from '../Utils/AudioUtils';
+import { getAudioDuration, initializeAudio, playAudio, stopAudio, pauseAudio } from '../Utils/AudioUtils';
 
 const AudioRecord = () => {
     const { startTimer, stopTimer, resetTimer, formatTime, displayTime } = TimerUtils();
@@ -18,6 +18,12 @@ const AudioRecord = () => {
     const [isPlayable, setIsPlayable] = useState(false);
     const [audioDuration, setAudioDuration] = useState('0:00');
     let stopButtonColor = isStoped ? 'text-white' : 'text-red-500';
+
+    useEffect(() => {
+        if(yourAudio !== '') {
+            setAudioPlayer();
+        }
+    }, [yourAudio]);
 
     const handleStartRecording = () => {
         setIsRecording(true);
@@ -31,6 +37,7 @@ const AudioRecord = () => {
         setIsStoped(false);
 
         const audioUrl = await getAudioUrl();
+        console.log(audioUrl);
         if(!audioUrl) {
             detectRecordError(true);
             clearAudio();
@@ -39,7 +46,6 @@ const AudioRecord = () => {
         setYourAudio(audioUrl);
         clearAudio();
         resetTimer();
-        setAudioPlayer();
     }
 
     const handlePauseRecording = () => {
@@ -55,7 +61,9 @@ const AudioRecord = () => {
     }
 
     const setAudioPlayer = async () => {
+        initializeAudio(yourAudio);
         const audioDuration = await getAudioDuration();
+        console.log(audioDuration);
         const displayDuration = formatTime(audioDuration);
         setAudioDuration(displayDuration);
         setIsPlayable(true);
@@ -88,7 +96,7 @@ const AudioRecord = () => {
         {isPlayable ?
             <>
                 <h3 className='text-gray-600 text-xs border-b-2 border-gray-200 mb-1 font-bold'>聞いてみる</h3>
-                <button type="button" className='bg-cyan-500 py-2 px-3 rounded-full hover:bg-cyan-400 flex text-white text-md mb-0.5'>
+                <button type="button" className='bg-cyan-500 py-2 px-3 rounded-full hover:bg-cyan-400 flex text-white text-md mb-0.5' onClick={ playAudio }>
                     <VscDebugStart className='mt-1 text-md mr-1' />
                     <span>Play</span>
                 </button>

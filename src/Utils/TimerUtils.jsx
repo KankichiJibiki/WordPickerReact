@@ -41,6 +41,7 @@ const TimerUtils = () => {
         startTimer,
         stopTimer,
         resetTimer,
+        formatTime,
         displayTime: formatTime(seconds)
     };
 }
