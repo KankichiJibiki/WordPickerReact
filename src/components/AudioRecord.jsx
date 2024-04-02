@@ -26,6 +26,7 @@ const AudioRecord = () => {
     }, [yourAudio]);
 
     const handleStartRecording = () => {
+        clearAudio();
         setIsRecording(true);
         startRecording();
         startTimer();
@@ -62,11 +63,12 @@ const AudioRecord = () => {
 
     const setAudioPlayer = async () => {
         initializeAudio(yourAudio);
-        const audioDuration = await getAudioDuration();
-        console.log(audioDuration);
-        const displayDuration = formatTime(audioDuration);
-        setAudioDuration(displayDuration);
-        setIsPlayable(true);
+        setTimeout(() => {
+            const audioDuration = getAudioDuration();
+            const displayDuration = formatTime(audioDuration);
+            setAudioDuration(displayDuration);
+            setIsPlayable(true);
+        }, 2000)
     }
 
     return (

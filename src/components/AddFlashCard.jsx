@@ -1,11 +1,11 @@
-import React from 'react'
 import { WordTypes } from '../constants/WordTypes';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IoAddCircle } from "react-icons/io5";
+import { LuBookUp } from "react-icons/lu";
 import { CiTrash } from "react-icons/ci";
+import { MdAutorenew } from "react-icons/md";
 import { AppConfigs } from '../constants/AppConfigs';
 import AudioRecord from './AudioRecord';
-import { initializeAudio, playAudio, stopAudio } from '../Utils/AudioUtils';
 
 const AddFlashCard = ({ isSignedUp }) => {
     const wordTypes = WordTypes();
@@ -19,6 +19,11 @@ const AddFlashCard = ({ isSignedUp }) => {
     const [examples, setExamples] = useState([{ example: '' }]);
     const [pronunciation, setPronunciation] = useState([]);
 
+    const [hasWord, setHasWord] = useState(false);
+
+    useEffect(() => {
+        word == '' ? setHasWord(false) : setHasWord(true);
+    }, [word]);
 
     const registerFlashCard = (e) => {
         console.log(e);
@@ -140,13 +145,21 @@ const AddFlashCard = ({ isSignedUp }) => {
                                     type="text" 
                                     id='word' 
                                     name='word' 
-                                    className='border border-gray-300 rounded w-full py-2 px-3 mb-2' 
+                                    className='border border-gray-300 rounded w-full py-2 px-3' 
                                     placeholder='eg. promising'
                                     required
                                     value={ word }
                                     onChange={(e) => setWord(e.target.value)}
                                 />
                             </div>
+                            { hasWord ? 
+                                <button type='button' className="flex mb-2 hover:bg-gray-300 rounded p-1">
+                                    <MdAutorenew />
+                                    <span className='text-bold text-sm text-black'>自動入力</span>
+                                </button>
+                                :
+                                <></>
+                            }
 
                             <div className="mb-4">
                                 <div className="flex mb-2">
@@ -156,7 +169,7 @@ const AddFlashCard = ({ isSignedUp }) => {
                                 <select 
                                     name="type" 
                                     id="type" 
-                                    className='border border-gray-300 rounded w-full py-2 px-3 mb-2' 
+                                    className='border border-gray-300 rounded w-full py-2 px-3 mb-2 hover:cursor-pointer' 
                                     required
                                     value={ type }
                                     onChange={(e) => setType(e.target.value)}
@@ -315,8 +328,11 @@ const AddFlashCard = ({ isSignedUp }) => {
                     </div>
 
                     <div className='text-center'>
-                        <button className="bg-teal-500 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline hover:bg-teal-400" type='button' onClick={ registerFlashCard }>
-                            Add Flash Card
+                        <button className="bg-teal-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-teal-400 inline-flex" type='button' onClick={ registerFlashCard }>
+                            <span className='mr-2'>
+                                Add Flash Card
+                            </span>
+                            <LuBookUp className='text-2lg mt-0.5' />
                         </button>
                     </div>
                 </form>
