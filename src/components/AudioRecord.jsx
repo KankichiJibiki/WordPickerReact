@@ -38,7 +38,6 @@ const AudioRecord = () => {
         setIsStoped(false);
 
         const audioUrl = await getAudioUrl();
-        console.log(audioUrl);
         if(!audioUrl) {
             detectRecordError(true);
             clearAudio();
@@ -63,12 +62,10 @@ const AudioRecord = () => {
 
     const setAudioPlayer = async () => {
         initializeAudio(yourAudio);
-        setTimeout(() => {
-            const audioDuration = getAudioDuration();
-            const displayDuration = formatTime(audioDuration);
-            setAudioDuration(displayDuration);
-            setIsPlayable(true);
-        }, 2000)
+        const audioDuration = await getAudioDuration();
+        const displayDuration = formatTime(audioDuration);
+        setAudioDuration(displayDuration);
+        setIsPlayable(true);
     }
 
     return (
@@ -95,7 +92,7 @@ const AudioRecord = () => {
                 </span>
             </button>
         }
-        {isPlayable ?
+        {isPlayable && !isRecording ?
             <>
                 <h3 className='text-gray-600 text-xs border-b-2 border-gray-200 mb-1 font-bold'>聞いてみる</h3>
                 <button type="button" className='bg-cyan-500 py-2 px-3 rounded-full hover:bg-cyan-400 flex text-white text-md mb-0.5' onClick={ playAudio }>
