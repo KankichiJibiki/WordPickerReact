@@ -6,13 +6,14 @@ import { CiTrash } from "react-icons/ci";
 import { MdAutorenew } from "react-icons/md";
 import { AppConfigs } from '../constants/AppConfigs';
 import AudioRecord from './AudioRecord';
+import FlashCardFeatures from '../features/FlashCardFeatures';
 
 const AddFlashCard = ({ isSignedUp }) => {
     const wordTypes = WordTypes();
     const typeKeys = Object.keys(wordTypes);
 
     const [word, setWord] = useState('');
-    const [type, setType] = useState('');
+    const [type, setType] = useState([]);
     const [definition_en, setEnDefinition] = useState([{ definitionEn: '' }]);
     const [definition_jp, setJPDefinition] = useState([{ definitionJp: '' }]);
     const [synonyms, setSynonyms] = useState([{ synonym: '' }]);
@@ -21,12 +22,73 @@ const AddFlashCard = ({ isSignedUp }) => {
 
     const [hasWord, setHasWord] = useState(false);
 
+    const MAX_AUTO_COMPLETION = 5;
+    const [isAutoCompError, setIsAutoCompError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { getDefinitionWord } = FlashCardFeatures();
+
     useEffect(() => {
         word == '' ? setHasWord(false) : setHasWord(true);
     }, [word]);
 
     const registerFlashCard = (e) => {
         console.log(e);
+    }
+
+    const autoWordCompletion = async () => {
+        if(!hasWord) return;
+
+        setIsAutoCompError(false);
+        setIsLoading(true);
+        
+        const result = await getDefinitionWord(word);
+        if(!result) {
+            setIsAutoCompError(true);
+            setIsLoading(false);
+        }
+        setAutoCompletion(result);
+        setIsLoading(true);
+    }
+
+    const setAutoCompletion = (result) => {
+        resetInputs();
+
+        for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
+            if('partOfSpeech', result.results[i]) {
+                setType([...type, result.results[i].partOfSpeech]);
+            }
+        }
+        
+        for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
+            if('definition' in result.results[i]) {
+                setValueToMultiInputHelper('definition_en', result.results[i].definition, i);
+            }
+        }
+        
+        for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
+            if('synonyms' in result.results[i]) {
+                setValueToMultiInputHelper('synonyms', result.results[i].synonyms[0], i);
+            }
+        }
+        
+        let indexEg = 0;
+        for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
+            if('examples' in result.results[i]) {
+                if(result.results[i].examples == '') {
+                    continue;
+                }
+                setValueToMultiInputHelper('examples', result.results[i].examples[0], indexEg);
+                indexEg++;
+            }
+        }
+    }
+
+    const resetInputs = () => {
+        setType([]);
+        setEnDefinition([{ definitionEn: '' }]);
+        setJPDefinition([{ definitionJp: '' }]);
+        setSynonyms([{ synonym: '' }]);
+        setExamples([{ example: '' }]);
     }
 
     const setValueToMultiInputHelper = (inputType, value, index) => {
@@ -48,6 +110,16 @@ const AddFlashCard = ({ isSignedUp }) => {
                 break;
         }
     };
+
+    const handleWordTypeChange = (e) => {
+        const { value, checked } = e.target;
+
+        if (checked) {
+            setType([...type, value]);
+        } else {
+            setType(type.filter((type) => type !== value));
+        }
+    }
 
     const setValueToMultiInput = (inputState, key, value, index) => {
         inputState(prevInputs => {
@@ -153,10 +225,18 @@ const AddFlashCard = ({ isSignedUp }) => {
                                 />
                             </div>
                             { hasWord ? 
-                                <button type='button' className="flex mb-2 hover:bg-gray-300 rounded p-1">
+                                <button type='button' className="flex  hover:bg-gray-300 rounded p-1">
                                     <MdAutorenew />
-                                    <span className='text-bold text-sm text-black'>自動入力</span>
+                                    <span className='text-bold text-sm text-black' onClick={ autoWordCompletion }>自動入力</span>
                                 </button>
+                                :
+                                <></>
+                            }
+                            {
+                                isAutoCompError ?
+                                    <p className="text-red-600 text-xs mb-2">
+                                        この単語の自動入力はできません
+                                    </p>
                                 :
                                 <></>
                             }
@@ -166,7 +246,7 @@ const AddFlashCard = ({ isSignedUp }) => {
                                     <label htmlFor="type" className='block text-gray-700 font-bold mr-2'>Word Type</label>
                                     <span className='bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300'>必須</span>
                                 </div>
-                                <select 
+                                {/* <select 
                                     name="type" 
                                     id="type" 
                                     className='border border-gray-300 rounded w-full py-2 px-3 mb-2 hover:cursor-pointer' 
@@ -181,7 +261,25 @@ const AddFlashCard = ({ isSignedUp }) => {
                                             </option>
                                         ))
                                     }
-                                </select>
+                                </select> */}
+                                {
+                                    typeKeys.map((value, index) => (
+                                        <div key={index} className='flex'>
+                                            <input 
+                                                name={`type${index}`}
+                                                type="checkbox" 
+                                                className="border border-gray-300 rounded py-3 px-3 mb-2 mt-1.5 mr-1 hover:cursor-pointer" 
+                                                required
+                                                value={ value }
+                                                checked={ type.includes(value) }
+                                                onChange={handleWordTypeChange}
+                                            />
+                                            <label htmlFor={`type${index}`}>
+                                                { value }
+                                            </label>
+                                        </div>
+                                    ))
+                                }
                             </div>
 
                             <div className="mb-4">
