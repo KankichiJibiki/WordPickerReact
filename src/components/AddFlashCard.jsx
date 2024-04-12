@@ -7,6 +7,7 @@ import { MdAutorenew } from "react-icons/md";
 import { AppConfigs } from '../constants/AppConfigs';
 import AudioRecord from './AudioRecord';
 import FlashCardFeatures from '../features/FlashCardFeatures';
+import BeatLoader from './BeatLoads';
 
 const AddFlashCard = ({ isSignedUp }) => {
     const wordTypes = WordTypes();
@@ -32,52 +33,76 @@ const AddFlashCard = ({ isSignedUp }) => {
     }, [word]);
 
     const registerFlashCard = (e) => {
-        console.log(e);
+        e.preventDefault();
+
+        const newFlashCard = {
+            word: word,
+            type: type,
+            definition_en: definition_en,
+            definition_jp: definition_jp,
+            synonyms: synonyms,
+            examples: examples
+        }
+
+        console.log(newFlashCard);
+
+        
     }
 
     const autoWordCompletion = async () => {
         if(!hasWord) return;
 
-        setIsAutoCompError(false);
         setIsLoading(true);
+        setIsAutoCompError(false);
         
         const result = await getDefinitionWord(word);
         if(!result) {
             setIsAutoCompError(true);
             setIsLoading(false);
+            return;
         }
+        resetInputs();
         setAutoCompletion(result);
-        setIsLoading(true);
+        setIsLoading(false);
     }
 
-    const setAutoCompletion = (result) => {
-        resetInputs();
+    const setAutoCompletion = async (result) => {
+        const types = [];
+        for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
+            if(result.Results[i] && result.Results[i].PartOfSpeech) {
+                if(type.includes(result.Results[i].PartOfSpeech)) {
+                    continue;
+                } 
+                types.push(result.Results[i].PartOfSpeech);
+            }
+        }
+        setType(types);
+        
+        for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
+            if(result.Results[i] && result.Results[i].Definition) {
+                setValueToMultiInputHelper('definition_en', result.Results[i].Definition, i);
+            }
+        }
 
         for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
-            if('partOfSpeech', result.results[i]) {
-                setType([...type, result.results[i].partOfSpeech]);
+            if(result.DefinitionsJp && result.DefinitionsJp[i]) {
+                setValueToMultiInputHelper('definition_jp', result.DefinitionsJp[i], i);
             }
         }
         
         for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
-            if('definition' in result.results[i]) {
-                setValueToMultiInputHelper('definition_en', result.results[i].definition, i);
-            }
-        }
-        
-        for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
-            if('synonyms' in result.results[i]) {
-                setValueToMultiInputHelper('synonyms', result.results[i].synonyms[0], i);
+            if(result.Results[i] && result.Results[i].Synonyms) {
+                setValueToMultiInputHelper('synonyms', result.Results[i].Synonyms[0], i);
             }
         }
         
         let indexEg = 0;
         for(let i = 0; i < MAX_AUTO_COMPLETION; i++) {
-            if('examples' in result.results[i]) {
-                if(result.results[i].examples == '') {
+            if(result.Results[i] && result.Results[i].Examples) {
+                if(result.Results[i].Examples == '') {
                     continue;
                 }
-                setValueToMultiInputHelper('examples', result.results[i].examples[0], indexEg);
+                setValueToMultiInputHelper('examples', result.Results[i].Examples[0], indexEg);
                 indexEg++;
             }
         }
@@ -225,10 +250,19 @@ const AddFlashCard = ({ isSignedUp }) => {
                                 />
                             </div>
                             { hasWord ? 
-                                <button type='button' className="flex  hover:bg-gray-300 rounded p-1">
-                                    <MdAutorenew />
-                                    <span className='text-bold text-sm text-black' onClick={ autoWordCompletion }>自動入力</span>
-                                </button>
+                                <div className="flex">
+                                    <button type='button' className="flex  hover:bg-gray-300 rounded p-1 mr-2">
+                                        <MdAutorenew />
+                                        <span className='text-bold text-sm text-black' onClick={ autoWordCompletion }>自動入力</span>
+                                    </button>
+
+                                    { isLoading 
+                                        ?
+                                        <BeatLoader loading={ isLoading } />
+                                        :
+                                        <></>
+                                    }
+                                </div>
                                 :
                                 <></>
                             }
@@ -246,22 +280,6 @@ const AddFlashCard = ({ isSignedUp }) => {
                                     <label htmlFor="type" className='block text-gray-700 font-bold mr-2'>Word Type</label>
                                     <span className='bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300'>必須</span>
                                 </div>
-                                {/* <select 
-                                    name="type" 
-                                    id="type" 
-                                    className='border border-gray-300 rounded w-full py-2 px-3 mb-2 hover:cursor-pointer' 
-                                    required
-                                    value={ type }
-                                    onChange={(e) => setType(e.target.value)}
-                                >
-                                    {
-                                        typeKeys.map((type, index) => (
-                                            <option key={ index } value={ type }>
-                                                { wordTypes[type] }
-                                            </option>
-                                        ))
-                                    }
-                                </select> */}
                                 {
                                     typeKeys.map((value, index) => (
                                         <div key={index} className='flex'>
@@ -275,7 +293,7 @@ const AddFlashCard = ({ isSignedUp }) => {
                                                 onChange={handleWordTypeChange}
                                             />
                                             <label htmlFor={`type${index}`}>
-                                                { value }
+                                                { wordTypes[value] }
                                             </label>
                                         </div>
                                     ))

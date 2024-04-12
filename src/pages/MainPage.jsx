@@ -4,6 +4,8 @@ import sampleWords from '../sample-word.json'
 import AddFlashCard from '../components/AddFlashCard'
 
 const MainPage = () => {
+    
+
     return (
         <>
             <div className="h-auto flex justify-center bg-teal-500 p-10">
