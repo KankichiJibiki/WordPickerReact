@@ -8,6 +8,7 @@ import { AppConfigs } from '../constants/AppConfigs';
 import AudioRecord from './AudioRecord';
 import FlashCardFeatures from '../features/FlashCardFeatures';
 import BeatLoader from './BeatLoads';
+import ArrayHelpers from '../Utils/ArrayHelpers';
 
 const AddFlashCard = ({ isSignedUp }) => {
     const wordTypes = WordTypes();
@@ -27,6 +28,7 @@ const AddFlashCard = ({ isSignedUp }) => {
     const [isAutoCompError, setIsAutoCompError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { getDefinitionWord } = FlashCardFeatures();
+    const { assoArrToArrayVal } = ArrayHelpers();
 
     useEffect(() => {
         word == '' ? setHasWord(false) : setHasWord(true);
@@ -38,15 +40,23 @@ const AddFlashCard = ({ isSignedUp }) => {
         const newFlashCard = {
             word: word,
             type: type,
-            definition_en: definition_en,
-            definition_jp: definition_jp,
-            synonyms: synonyms,
-            examples: examples
+            definition_en: assoArrToArrayVal(definition_en),
+            definition_jp: assoArrToArrayVal(definition_jp),
+            synonyms: assoArrToArrayVal(synonyms),
+            examples: assoArrToArrayVal(examples)
         }
 
         console.log(newFlashCard);
 
         
+    }
+
+    const resetInputs = () => {
+        setType([]);
+        setEnDefinition([{ definitionEn: '' }]);
+        setJPDefinition([{ definitionJp: '' }]);
+        setSynonyms([{ synonym: '' }]);
+        setExamples([{ example: '' }]);
     }
 
     const autoWordCompletion = async () => {
@@ -106,14 +116,6 @@ const AddFlashCard = ({ isSignedUp }) => {
                 indexEg++;
             }
         }
-    }
-
-    const resetInputs = () => {
-        setType([]);
-        setEnDefinition([{ definitionEn: '' }]);
-        setJPDefinition([{ definitionJp: '' }]);
-        setSynonyms([{ synonym: '' }]);
-        setExamples([{ example: '' }]);
     }
 
     const setValueToMultiInputHelper = (inputType, value, index) => {

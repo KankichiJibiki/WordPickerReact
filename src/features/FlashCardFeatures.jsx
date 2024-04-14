@@ -9,6 +9,7 @@ const FlashCardFeatures = () => {
         const encodedWord = encodeURIComponent(word);
 
         const result = await makeRequest(url, 'GET', encodedWord);
+        console.log(result);
         if(result == '') {
             return false;
         }
