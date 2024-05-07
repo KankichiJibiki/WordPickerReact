@@ -253,7 +253,7 @@ const AddFlashCard = ({ isSignedUp }) => {
                             </div>
                             { hasWord ? 
                                 <div className="flex">
-                                    <button type='button' className="flex  hover:bg-gray-300 rounded p-1 mr-2">
+                                    <button type='button' className="flex hover:bg-gray-300 rounded p-1 mr-2" disabled={ isLoading }>
                                         <MdAutorenew />
                                         <span className='text-bold text-sm text-black' onClick={ autoWordCompletion }>自動入力</span>
                                     </button>
