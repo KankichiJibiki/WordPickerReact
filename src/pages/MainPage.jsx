@@ -4,12 +4,12 @@ import sampleWords from '../sample-word.json'
 import AddFlashCard from '../components/AddFlashCard'
 
 const MainPage = () => {
-    
+    const reversedSampleWords = [...sampleWords.wordLists].reverse();
 
     return (
         <>
-            <div className="h-auto flex justify-center bg-teal-500 p-10">
-                <div className='w-64 text-white text-center mr-4 p-2'>
+            <div className="h-auto flex justify-center bg-gray-50 p-10">
+                <div className='w-64 text-center mr-4 p-2'>
                     <h1 className="text-2xl text-start mb-2">電子単語帳</h1>
                     <p className='text-start'>
                         フラッシュカードや発音の録音、発音記号の表示、登録した単語をもとに文章作成したりと...使い方は自分次第！
@@ -28,8 +28,9 @@ const MainPage = () => {
                 <p className="text-sm text-gray-600">正しい発音を再生もできるし、自分の発音をレコード登録もできる。ユニークなオリジナルの単語帳を作ろう！</p>
             </div>
             <div className="flex justify-around flex-wrap ">
+                {console.log(reversedSampleWords)}
                 { 
-                    sampleWords.wordLists.map((wordList) => (
+                    reversedSampleWords.map((wordList) => (
                         <FlashCard key={ wordList.id } wordList={ wordList } />
                     )) 
                 }
