@@ -12,7 +12,6 @@ import TimerUtils from '../Utils/TimerUtils';
 
 const FlashCard = ({ wordList }) => {
     const { startTimer, resetTimer, displayTime } = TimerUtils();
-    console.log(wordList);
     const [isViewAll, toggleView] = useState(false);
     const [isRecording, toggleRecord] = useState(false);
     const [yourAudio, setYourAudio] = useState(wordList.yourAudio);
@@ -67,16 +66,14 @@ const FlashCard = ({ wordList }) => {
                     <div className="mb-4">
                         <div className="inline">
                             {
-                                wordList.type.map((wordType) => (
-                                    <div key={wordType} className="text-gray-500 w-auto mb-1">
-                                        <span className='mr-1'>
-                                            { wordType } - 
-                                        </span>
-                                        <span>
-                                            { wordTypes[wordType] }
-                                        </span>
-                                    </div>
-                                ))
+                                <div className="text-gray-500 w-auto mb-1">
+                                    <span className='mr-1'>
+                                        { wordList.type } - 
+                                    </span>
+                                    <span>
+                                        { wordTypes[wordList.type] }
+                                    </span>
+                                </div>
                             }
                         </div>
                         <h3 className="text-xl font-bold">{ wordList.word }</h3>
