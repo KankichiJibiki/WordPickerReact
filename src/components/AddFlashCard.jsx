@@ -16,8 +16,8 @@ const AddFlashCard = ({ isSignedUp }) => {
 
     const [word, setWord] = useState('');
     const [type, setType] = useState([]);
-    const [definition_en, setEnDefinition] = useState([{ definitionEn: '' }]);
-    const [definition_jp, setJPDefinition] = useState([{ definitionJp: '' }]);
+    const [definition_en, setEnDefinition] = useState('');
+    const [definition_jp, setJPDefinition] = useState('');
     const [synonyms, setSynonyms] = useState([{ synonym: '' }]);
     const [examples, setExamples] = useState([{ example: '' }]);
     const [pronunciation, setPronunciation] = useState([]);
@@ -53,8 +53,8 @@ const AddFlashCard = ({ isSignedUp }) => {
 
     const resetInputs = () => {
         setType([]);
-        setEnDefinition([{ definitionEn: '' }]);
-        setJPDefinition([{ definitionJp: '' }]);
+        setEnDefinition('');
+        setJPDefinition('');
         setSynonyms([{ synonym: '' }]);
         setExamples([{ example: '' }]);
     }
@@ -120,12 +120,6 @@ const AddFlashCard = ({ isSignedUp }) => {
 
     const setValueToMultiInputHelper = (inputType, value, index) => {
         switch(inputType) {
-            case 'definition_en': 
-                setValueToMultiInput(setEnDefinition, 'definitionEn', value, index);
-                break;
-            case 'definition_jp': 
-                setValueToMultiInput(setJPDefinition, 'definitionJp', value, index);
-                break;
             case 'examples': 
                 setValueToMultiInput(setExamples, 'example', value, index);
                 break;
@@ -138,16 +132,6 @@ const AddFlashCard = ({ isSignedUp }) => {
         }
     };
 
-    const handleWordTypeChange = (e) => {
-        const { value, checked } = e.target;
-
-        if (checked) {
-            setType([...type, value]);
-        } else {
-            setType(type.filter((type) => type !== value));
-        }
-    }
-
     const setValueToMultiInput = (inputState, key, value, index) => {
         inputState(prevInputs => {
             const updatedInputs = [...prevInputs];
@@ -158,12 +142,6 @@ const AddFlashCard = ({ isSignedUp }) => {
 
     const addInput = (inputType) => {
         switch(inputType) {
-            case 'definition_en': 
-                setNewInput(definition_en, setEnDefinition, 'definitionEn');
-                break;
-            case 'definition_jp': 
-                setNewInput(definition_jp, setJPDefinition, 'definitionJp');
-                break;
             case 'examples': 
                 setNewInput(examples, setExamples, 'example');
                 break;
@@ -178,12 +156,6 @@ const AddFlashCard = ({ isSignedUp }) => {
 
     const deleteInput = (inputType, index) => {
         switch(inputType) {
-            case 'definition_en': 
-                removeInput(definition_en, setEnDefinition, index);
-                break;
-            case 'definition_jp': 
-                removeInput(definition_jp, setJPDefinition, index);
-                break;
             case 'examples': 
                 removeInput(examples, setExamples, index);
                 break;
@@ -282,24 +254,22 @@ const AddFlashCard = ({ isSignedUp }) => {
                                     <label htmlFor="type" className='block text-gray-700 font-bold mr-2'>Word Type</label>
                                     <span className='bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300'>必須</span>
                                 </div>
-                                {
-                                    typeKeys.map((value, index) => (
-                                        <div key={index} className='flex'>
-                                            <input 
-                                                name={`type${index}`}
-                                                type="checkbox" 
-                                                className="border border-gray-300 rounded py-3 px-3 mb-2 mt-1.5 mr-1 hover:cursor-pointer" 
-                                                required
-                                                value={ value }
-                                                checked={ type.includes(value) }
-                                                onChange={handleWordTypeChange}
-                                            />
-                                            <label htmlFor={`type${index}`}>
-                                                { wordTypes[value] }
-                                            </label>
-                                        </div>
-                                    ))
-                                }
+                                <select 
+                                    name="type" 
+                                    id="type" 
+                                    className='border border-gray-300 rounded w-full py-2 px-3 mb-2 hover:cursor-pointer' 
+                                    required
+                                    value={ type }
+                                    onChange={(e) => setType(e.target.value)}
+                                >
+                                    {
+                                        typeKeys.map((type, index) => (
+                                            <option key={ index } value={ type }>
+                                                { wordTypes[type] }
+                                            </option>
+                                        ))
+                                    }
+                                </select>
                             </div>
 
                             <div className="mb-4">
@@ -309,31 +279,15 @@ const AddFlashCard = ({ isSignedUp }) => {
                                     </label>
                                     <span className='bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300'>必須</span>
                                 </div>
-                                {definition_en.map((input, index) => (
-                                    <div className="flex mb-2" key={ index }>
-                                        <span className='text-md text-gray-400 mr-2 my-auto'>
-                                            { index + 1 }
-                                        </span>
-                                        <input 
-                                            type="text" 
-                                            id={ `definition_en_${index}` } 
-                                            name={ `definition_en_${index}` } 
-                                            className='border border-gray-300 rounded w-full py-2 px-3' 
-                                            placeholder='eg. bright'
-                                            required
-                                            value={ input.definitionEn }
-                                            onChange={(e) => setValueToMultiInputHelper('definition_en', e.target.value, index)}
-                                        />
-                                        <CiTrash 
-                                            className='text-2xl hover:text-red-500 hover:cursor-pointer my-auto ml-1' 
-                                            onClick={ () => deleteInput('definition_en', index) }
-                                        />
-                                    </div>
-                                ))}
-                                
-                                <IoAddCircle 
-                                    className='text-2xl hover:text-gray-400 hover:cursor-pointer ml-auto mr-7' 
-                                    onClick={ () => addInput('definition_en') }
+                                <input 
+                                    type="text" 
+                                    id='definition_en' 
+                                    name='definition_en' 
+                                    className='border border-gray-300 rounded w-full py-2 px-3' 
+                                    placeholder='eg. bright'
+                                    required
+                                    value={ definition_en }
+                                    onChange={(e) => setEnDefinition(e.target.value)}
                                 />
                             </div>
 
@@ -342,31 +296,15 @@ const AddFlashCard = ({ isSignedUp }) => {
                                     <label className='block text-gray-700 font-bold mr-2'>日本語での意味</label>
                                     <span className='bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300'>必須</span>
                                 </div>
-                                {definition_jp.map((input, index) => (
-                                    <div className="flex mb-2" key={ index }>
-                                        <span className='text-md text-gray-400 mr-2 my-auto'>
-                                            { index + 1 }
-                                        </span>
-                                        <input 
-                                            type="text" 
-                                            id={ `definition_jp_${index}` } 
-                                            name={ `definition_jp_${index}` } 
-                                            className='border border-gray-300 rounded w-full py-2 px-3' 
-                                            placeholder='eg. 将来有望な'
-                                            required
-                                            value={ input.definitionJp }
-                                            onChange={(e) => setValueToMultiInputHelper('definition_jp', e.target.value, index)}
-                                        />
-                                        <CiTrash 
-                                            className='text-2xl hover:text-red-500 hover:cursor-pointer my-auto ml-1' 
-                                            onClick={ () => deleteInput('definition_jp', index) }
-                                        />
-                                    </div>
-                                ))}
-                                
-                                <IoAddCircle 
-                                    className='text-2xl hover:text-gray-400 hover:cursor-pointer ml-auto mr-7' 
-                                    onClick={ () => addInput('definition_jp') }
+                                <input 
+                                    type="text" 
+                                    id='definition_jp' 
+                                    name='definition_jp' 
+                                    className='border border-gray-300 rounded w-full py-2 px-3' 
+                                    placeholder='eg. 将来有望な'
+                                    required
+                                    value={ definition_jp }
+                                    onChange={(e) => setJPDefinition(e.target.value)}
                                 />
                             </div>
                         </section>
