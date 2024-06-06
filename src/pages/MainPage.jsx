@@ -1,50 +1,55 @@
 import React from 'react'
-import FlashCard from '../components/FlashCard'
-import sampleWords from '../sample-word.json'
-import AddFlashCard from '../components/AddFlashCard'
+import FlashCard from '../components/ui/FlashCard'
+import sampleWordsJson from '../sample-word.json'
+import AddFlashCard from '../components/ui/AddFlashCard'
+import { useState } from 'react'
 
 const MainPage = () => {
-    const reversedSampleWords = [...sampleWords.wordLists].reverse();
+    const [sampleWords, setSampleWord] = useState(sampleWordsJson.wordLists)
+
+    const addSampleFlashCard = (wordList) => {
+        const newSampleWords = sampleWords;
+        newSampleWords.splice(0, 0, wordList);
+        setSampleWord([...sampleWords], newSampleWords);
+    };
 
     return (
         <>
-            <div className="h-auto flex justify-center bg-gray-50 p-10">
-                <div className='w-64 text-center mr-4 p-2'>
-                    <h1 className="text-2xl text-start mb-2">電子単語帳</h1>
-                    <p className='text-start'>
-                        フラッシュカードや発音の録音、発音記号の表示、登録した単語をもとに文章作成したりと...使い方は自分次第！
-                        自分なりの単語帳を作ってカスタマイズしてみよう!
+            <div className="h-auto bg-teal-300/25 p-10">
+                <div className='w-90 text-center mr-4 p-2'>
+                    <h1 className="text-2xl font-bold text-start mb-4">電子単語帳</h1>
+                    <p className='text-start font-bold text-gray-600 text-lg'>
+                        英語学習者の「欲しかった」をパッケージ化した。<br />
+                        そんなアプリです。<br />
+                        使い方はお任せします。和訳や発音確認、フラッシュカード、独り言英語としてもご使用いただけます。
                     </p>
-                </div>
-                <div className="bg-teal-300 ml-4">
-                    Image here
                 </div>
             </div>
 
-            <div className="text-center my-5">
+            <div className="text-center my-6">
                 <h2 className='text-xl mb-1'>
                     従来のフラッシュカードより単語の定着率UP
                 </h2>
                 <p className="text-sm text-gray-600">正しい発音を再生もできるし、自分の発音をレコード登録もできる。ユニークなオリジナルの単語帳を作ろう！</p>
             </div>
             <div className="flex justify-around flex-wrap ">
-                {console.log(reversedSampleWords)}
+                {console.log(sampleWords)}
                 { 
-                    reversedSampleWords.map((wordList) => (
-                        <FlashCard key={ wordList.id } wordList={ wordList } />
+                    sampleWords.map((wordList, index) => (
+                        <FlashCard key={ index } wordList={ wordList } />
                     )) 
                 }
             </div>
 
-            <h2 className='text-center my-5 p-2 text-xl'>
+            <h2 className='text-center my-6 p-2 text-xl'>
                 自由に覚えたい単語を登録してみよう。単語の意味などは自動補完してくれるから簡単！
             </h2>
             <div>
-                <AddFlashCard />
+                <AddFlashCard addSampleFlashCard={addSampleFlashCard}/>
             </div>
             
 
-            <h2 className='text-center my-5 p-2 text-xl'>
+            <h2 className='text-center my-6 p-2 text-xl'>
                 自分が覚えたい単語の登録はもちろん180語搭載のスターターパックも使える
             </h2>
 

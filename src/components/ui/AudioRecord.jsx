@@ -4,9 +4,9 @@ import { FaCircleStop } from "react-icons/fa6";
 import { CiPause1 } from "react-icons/ci";
 import { VscDebugStart } from "react-icons/vsc";
 import { useState, useEffect } from 'react';
-import TimerUtils from '../Utils/TimerUtils';
-import { startRecording, stopRecording, getAudioUrl, clearAudio, pauseRecording } from '../Utils/RecordVoiceUtils';
-import { getAudioDuration, initializeAudio, playAudio, stopAudio, pauseAudio } from '../Utils/AudioUtils';
+import TimerUtils from '../../Utils/TimerUtils';
+import { startRecording, stopRecording, getAudioUrl, clearAudio, pauseRecording } from '../../Utils/RecordVoiceUtils';
+import { getAudioDuration, initializeAudio, playAudio, stopAudio, pauseAudio } from '../../Utils/AudioUtils';
 
 const AudioRecord = () => {
     const { startTimer, stopTimer, resetTimer, formatTime, displayTime } = TimerUtils();

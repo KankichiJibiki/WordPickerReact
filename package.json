@@ -12,8 +12,10 @@
   "dependencies": {
     "firebase": "^10.9.0",
     "firebaseui": "^6.1.0",
+    "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.5",
     "react-icons": "^5.0.1",
     "react-router-dom": "^6.22.3",
     "react-spinners": "^0.13.8",

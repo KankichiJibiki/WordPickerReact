@@ -1,14 +1,14 @@
 import React from 'react'
-import Card from '../components/Card'
+import Card from '../Card'
 import { useState } from 'react'
 import { GrCaretDown, GrCaretUp  } from "react-icons/gr";
 import { GiSpeaker } from "react-icons/gi";
 import { AiFillAudio } from "react-icons/ai";
 import { FaStopCircle } from "react-icons/fa";
-import { initializeAudio, playAudio, stopAudio } from '../Utils/AudioUtils';
-import { WordTypes } from '../constants/WordTypes';
-import { startRecording, stopRecording, getAudioUrl, clearAudio } from '../Utils/RecordVoiceUtils';
-import TimerUtils from '../Utils/TimerUtils';
+import { initializeAudio, playAudio, stopAudio } from '../../Utils/AudioUtils';
+import { WordTypes } from '../../constants/WordTypes';
+import { startRecording, stopRecording, getAudioUrl, clearAudio } from '../../Utils/RecordVoiceUtils';
+import TimerUtils from '../../Utils/TimerUtils';
 
 const FlashCard = ({ wordList }) => {
     const { startTimer, resetTimer, displayTime } = TimerUtils();
@@ -25,12 +25,13 @@ const FlashCard = ({ wordList }) => {
         badgeStyle = 'bg-blue-100 text-blue-800 font-medium dark:bg-blue-900 dark:text-blue-300';
     }
 
-    const domain = window.location.origin;
-    const audiosPath = `${domain}/src/assets/audios/`;
     const playPronunciation = () => {
+        console.log(exAudioExists);
         if(!exAudioExists) return;
 
-        const audioSrc = initializeAudio(audiosPath + wordList.exampleAudio);
+        console.log(wordList.exampleAudio);
+        const audioSrc = initializeAudio(wordList.exampleAudio);
+        console.log(audioSrc);
         if(audioSrc) {
             stopAudio();
             playAudio();

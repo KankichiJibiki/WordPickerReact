@@ -15,7 +15,7 @@
             "pronunciation": {
                 "all": "pɑpjə'leɪʃən"
             },
-            "exampleAudio": "34025f1d-6cb8-4788-9bcf-eb0e337471b7.mp3",
+            "exampleAudio": "/src/assets/audios/34025f1d-6cb8-4788-9bcf-eb0e337471b7.mp3",
             "yourAudio": ""
         },
         {
@@ -34,7 +34,7 @@
             "pronunciation": {
                 "all": "ɪ'nɔrməs"
             },
-            "exampleAudio": "ca2a9eb1-0f3d-4dc6-b154-5000dbd95f56.mp3",
+            "exampleAudio": "/src/assets/audios/ca2a9eb1-0f3d-4dc6-b154-5000dbd95f56.mp3",
             "yourAudio": ""
         },
         {
@@ -52,7 +52,7 @@
             "pronunciation": {
                 "all": ""
             },
-            "exampleAudio": "c1d996ee-db36-4070-b74d-5d4fa70083b1.mp3",
+            "exampleAudio": "/src/assets/audios/c1d996ee-db36-4070-b74d-5d4fa70083b1.mp3",
             "yourAudio": ""
         }
     ]

@@ -1,23 +1,41 @@
 import HttpFeature from './HttpFeature';
-import { GetApiUrl, GetWordsApiUrl } from '../config/AppConfig';
+import { GetApiUrl, GetWordsFullInfoApiUrl, GetWordsPronunciationApiUrl } from '../config/AppConfig';
 
 const FlashCardFeatures = () => {
     const { makeRequest } = HttpFeature();
     
-    const getDefinitionWord = async (word) => {
-        const url = GetApiUrl() + GetWordsApiUrl();
+    const getFullDefinitionWord = async (word) => {
+        const url = GetApiUrl() + GetWordsFullInfoApiUrl();
         const encodedWord = encodeURIComponent(word);
 
-        const result = await makeRequest(url, 'GET', encodedWord);
-        console.log(result);
-        if(result == '') {
-            return false;
+        try {
+            const result = await makeRequest(url, 'GET', encodedWord);
+            console.log(result);
+            return result;
+        } catch (error) {
+            console.log(error);
+            return error;
         }
-        
-        return result;
     };
 
-    return { getDefinitionWord };
+    const getWordPronunciation = (word) => new Promise(async resolve => {
+        const url = GetApiUrl() + GetWordsPronunciationApiUrl();
+        const encodedWord = encodeURIComponent(word);
+
+        try {
+            const result = await makeRequest(url, 'GET', encodedWord);
+            console.log(result);
+            resolve(result);
+        } catch (error) {
+            console.log(error);
+            resolve(error);
+        }
+    });
+
+    return { 
+        getFullDefinitionWord, 
+        getWordPronunciation 
+    };
 }
 
 export default FlashCardFeatures
