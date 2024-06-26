@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Element } from 'react-scroll';
+import { scrollToEle } from '../Utils/ScrollUtils';
+import AddFlashCard from '../components/ui/AddFlashCard';
 import FlashCard from '../components/ui/FlashCard';
 import sampleWordsJson from '../sample-word.json';
-import AddFlashCard from '../components/ui/AddFlashCard';
-import { useState } from 'react';
-import { scrollToEle } from '../Utils/ScrollUtils';
-import { Element } from 'react-scroll';
 
 const MainPage = () => {
     const [sampleWords, setSampleWord] = useState(sampleWordsJson.wordLists);
@@ -61,6 +60,9 @@ const MainPage = () => {
             </div>
 
             {/* Quiz introduction */}
+            <h2 className="text-center my-6 p-2 text-xl">
+                単語クイズを活用して、1日1つずつ英単語を覚えよう!
+            </h2>
 
             <h2 className="text-center my-6 p-2 text-xl">
                 自分が覚えたい単語の登録はもちろん180語搭載のスターターパックも使える
