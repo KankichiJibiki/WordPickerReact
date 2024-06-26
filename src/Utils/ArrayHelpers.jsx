@@ -1,5 +1,4 @@
 const ArrayHelpers = () => {
-    
     const assoArrToArrayVal = (assoArr) => {
         const toArray = [];
 
@@ -8,9 +7,9 @@ const ArrayHelpers = () => {
         });
 
         return toArray;
-    }
+    };
 
-  return { assoArrToArrayVal }
-}
+    return { assoArrToArrayVal };
+};
 
-export default ArrayHelpers
+export default ArrayHelpers;

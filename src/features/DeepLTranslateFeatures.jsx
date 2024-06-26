@@ -1,8 +1,3 @@
-import HttpFeature from './HttpFeature';
+const DeepLTranslateFeatures = () => {};
 
-const DeepLTranslateFeatures = () => {
-    const { makeRequest } = HttpFeature();
-
-}
-
-export default DeepLTranslateFeatures
+export default DeepLTranslateFeatures;
